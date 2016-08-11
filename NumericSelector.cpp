@@ -1,12 +1,15 @@
 #include "NumericSelector.h"
 
-NumericSelector::NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback) : MenuItem(parent, text), variable(variable) {
+NumericSelector::NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback, const char** arr) : MenuItem(parent, text), variable(variable) {
     this->min = min;
     this->max = max;
 
     this->callback = callback;
 
     oldValue = variable;
+
+    if (arr)
+      this->arr = arr;
 };
 
 uint8_t NumericSelector::getValue() { return variable; }
@@ -14,8 +17,12 @@ uint8_t NumericSelector::getMin()   { return min; }
 uint8_t NumericSelector::getMax()   { return max; }
 
 const char* NumericSelector::getSecondaryText() {
-    snprintf_P(valueStr, 5, PSTR("<%d>"), variable);
-
+    if (arr==NULL) {
+      snprintf_P(valueStr, 18, PSTR("<%d>"), variable);
+    } else {
+      snprintf_P(valueStr, 18, PSTR("<%s>"), arr[variable]);
+    }
+    
     return valueStr;
 }
 

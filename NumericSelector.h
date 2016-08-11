@@ -1,5 +1,7 @@
 /*
     This item set a variable to a integer value in a range.
+    
+    support for text array by reaper7
 */
 
 #include <Arduino.h>
@@ -13,14 +15,14 @@
 class NumericSelector : public MenuItem {
     public:
         typedef void(*NumberSelectedCallback)(bool);
-
-        NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback = NULL);
+       
+        NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback = NULL, const char** arr = NULL);
 
         uint8_t getValue();
         uint8_t getMin();
         uint8_t getMax();
 
-        char getTypeId() { return 's'; };
+        char getTypeId() { return (arr?'t':'s'); }; //s - numeric selector; t - array selector
 
         const char* getSecondaryText();
 
@@ -35,9 +37,10 @@ class NumericSelector : public MenuItem {
     private:
         uint8_t& variable;
         uint8_t oldValue, min, max;
+        
+        const char** arr;
 
-
-        char valueStr[5];
+        char valueStr[18];
 
         NumberSelectedCallback callback;
 };
