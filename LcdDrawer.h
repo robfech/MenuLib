@@ -1,8 +1,13 @@
 #ifndef __lcd_drawer_h__
 #define __lcd_drawer_h__
 
+#define SSD1306
+
 #include <MenuLib.h>
 #include <LightLCD.h>
+
+#define SELECTORSSTART 9
+#define SELECTORHEIGHT 7
 
 class LcdDrawer : public MenuItemDrawer {
 
@@ -101,27 +106,25 @@ class LcdDrawer : public MenuItemDrawer {
 			e = first;
 			i = 0;
 
-			lcd.setCursor(0, 12);
-			
+      lcd.setCursor(0, SELECTORSSTART);
+
 			// Now actually draw the entries
 			while (e && i < items_per_screen) {
 				if (e->item->isEnabled()) {
 
-					y = 9 + 13 * i;
-					
+					y = SELECTORSSTART + SELECTORHEIGHT * i;
+
 					if(e == menu->getSelectedListEntry()) {
-						lcd.fillRect(0, y, lcd.width(), 13, 1);
+            lcd.fillRect(0, y, lcd.width(), SELECTORHEIGHT, 1);
 						lcd.setTextColor(0);
 					} else
 						lcd.setTextColor(1);
 
 					secText = (char*)e->item->getSecondaryText();
 
-					if(!secText)
-						y += 3;
-					else {
+					if(secText) {
 						// Draw secondary text
-						lcd.setCursor(lcd.width() - lcd.getStringWidth(secText), y + 6);
+            lcd.setCursor(lcd.width() - lcd.getStringWidth(secText), y);
 						lcd.print(secText);
 					}
 					
@@ -150,7 +153,7 @@ class LcdDrawer : public MenuItemDrawer {
 		    #define RECT_H 14
 		    #define RECT_Y 18
 		#elif defined SSD1306
-		    #define RECT_W 68
+		    #define RECT_W 76
 		    #define RECT_H 14
 		    #define RECT_Y 18
 		#endif
@@ -171,13 +174,19 @@ class LcdDrawer : public MenuItemDrawer {
 			lcd.print('<');
 			
 			// Guess the x pos to center the value number
-			drawCenterNumber(selector->getValue(), TEXT_Y);
+			if (selector->getTypeId() == 's') {                    //numeric selector
+        drawCenterNumber(selector->getValue(), TEXT_Y);
+      } else if (selector->getTypeId() == 't') {            //array selector
+        const char* text = selector->getSecondaryText();
+        setCenterCursor(lcd.getStringWidth(text), TEXT_Y);
+        lcd.print(text);     
+      }
 			
 			// Still some decorations
 			lcd.setCursor(RECT_X + RECT_W - 6, TEXT_Y);
 			lcd.println('>');
 		}
-
+	
 		// Override this to extend functionalities
 		void virtual drawOther(MenuItem* item) {};
 
@@ -199,9 +208,10 @@ class LcdDrawer : public MenuItemDrawer {
 				// Actions and Check Boxes does not need to be drawn
 				// case 'a':
 				// case 'c':
-				case 's':
+				case 't': //array selector
+				case 's': //numeric selector
 					drawSelector((NumericSelector*)item);
-					break;
+					break;					
 				default:
 					drawOther(item);
 			}
