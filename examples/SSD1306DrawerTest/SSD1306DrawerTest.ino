@@ -34,11 +34,11 @@ bool testbool = false;
       //---saturation
       const char *arr_p_sat[]={"Dafault", "Yes"};
       uint8_t arr_p_sat_val = 0;
-      uint8_t arr_p_sat_max = 1;      
+      uint8_t arr_p_sat_max = 1;
       //---sharpness
       const char *arr_p_sha[]={"Video", "Fast Still", "LowISO Still", "HighISO Still", "Default"};
       uint8_t arr_p_sha_val = 0;
-      uint8_t arr_p_sha_max = 4;             
+      uint8_t arr_p_sha_max = 4;
       //---create raw
       bool chb_p_raw = false;
 
@@ -65,7 +65,7 @@ void setup() {
   lcd.flipScreenVertically();
   lcd.displayOn();
   lcd.clear();
-  lcd.setContrast(255); 
+  lcd.setContrast(255);
   lcd.display();
 
   root->setText(F("Xiaomi Yi Config"));
@@ -76,7 +76,7 @@ void setup() {
     photoset->addItem(new CheckBox(photoset, F("AWB"), chb_p_awb));
     photoset->addItem(new Action(photoset, F("Auto Knee"), NULL));
     photoset->addItem(new NumericSelector(photoset, F("Saturation"), arr_p_sat_val, 0, arr_p_sat_max, NULL, arr_p_sat));
-    photoset->addItem(new NumericSelector(photoset, F("Sharpness"), arr_p_sha_val, 0, arr_p_sha_max, NULL, arr_p_sha));    
+    photoset->addItem(new NumericSelector(photoset, F("Sharpness"), arr_p_sha_val, 0, arr_p_sha_max, NULL, arr_p_sha));
     photoset->addItem(new CheckBox(photoset, F("Create RAW"), chb_p_raw));
     root->addItem(photoset);
 
@@ -99,23 +99,23 @@ void setup() {
     otherset->addItem(new NumericSelector(otherset, F("NumericSelect 3"), testval, 0, 100));
     otherset->addItem(new Action(otherset, F("Do something 4"), somevoid));
     root->addItem(otherset);
- 
+
   menu->draw();
 }
 
 void loop() {
   if(Serial.available() > 0) {
     cmd = Serial.read();
-    
+
     switch(cmd) {
         case 'w': menu->prev(); break;
         case 's': menu->next(); break;
-    
+
         case ' ': menu->select(); break;
         case 'x': menu->back(); break;
-    
+
         default:
-          break; 
+          break;
           //Serial.print("Unknow command ");
           //Serial.println(cmd);
     }
@@ -124,4 +124,3 @@ void loop() {
   }
 
 }
-
