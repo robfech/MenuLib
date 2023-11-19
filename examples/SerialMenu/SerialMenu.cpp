@@ -7,8 +7,12 @@ SerialDrawer* dr = new SerialDrawer();
 MenuController* menu = new MenuController(root, dr);
 
 
-uint8_t test = 1010;
+uint8_t test = 10;
 char cmd;
+
+const char *test_arr[]={"AAAA", "BBBB", "CCCC", "DDDD"};
+uint8_t test_arr_val = 0;
+uint8_t test_arr_max = 3;
 
 void setup() {
 
@@ -20,7 +24,8 @@ void setup() {
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Aaa"), NULL));
       sub->addItem(new Action(sub, F("bbb"), NULL));
-      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 1024));
+      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244));
+      sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, NULL, test_arr));
 
       root->addItem(sub);
 

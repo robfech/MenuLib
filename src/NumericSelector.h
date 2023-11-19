@@ -1,6 +1,6 @@
 /*
     This item set a variable to a integer value in a range.
-    
+
     support for text array by reaper7
 */
 
@@ -15,7 +15,7 @@
 class NumericSelector : public MenuItem {
     public:
         typedef void(*NumberSelectedCallback)(bool);
-       
+
         NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback = NULL, const char** arr = NULL);
 
         uint8_t getValue();
@@ -33,12 +33,12 @@ class NumericSelector : public MenuItem {
         void doPrev();
 
         MenuItem* action();
-        
+
     private:
         uint8_t& variable;
         uint8_t oldValue, min, max;
-        
-        const char** arr;
+
+        const char** arr = NULL;
 
         char valueStr[18];
 

@@ -4,7 +4,12 @@
 
 void SerialDrawer::drawMenu(Menu* menu) {
     Serial.print(F("Menu: "));
-    Serial.println(menu->getText());
+    if (menu->isTextFlash()) {
+        const FlashString* text = reinterpret_cast<const FlashString*>(menu->getText());
+        Serial.println(text);
+    } else {
+        Serial.println(menu->getText());
+    }
 
     ListEntry* e = menu->getCollection();
 
@@ -43,9 +48,12 @@ void SerialDrawer::drawMenu(Menu* menu) {
 
 void SerialDrawer::drawSelector(NumericSelector* selector) {
     Serial.print(F("Selector: "));
-    Serial.print(selector->getText());
+
+    const FlashString* text = reinterpret_cast<const FlashString*>(selector->getText());
+    Serial.print(text);
+
     Serial.print(F(" <"));
-    Serial.print(selector->getValue());
+    Serial.print(selector->getSecondaryText());
     Serial.println(F(">"));
 }
 
@@ -57,10 +65,11 @@ void SerialDrawer::draw(MenuItem* item) {
             drawMenu((Menu*)item);
             break;
 
-        /*case 'a':                
+        /*case 'a':
             drawAction((Action*)item);
             break;
         */
+        case 't':
         case 's':
             drawSelector((NumericSelector*)item);
             break;

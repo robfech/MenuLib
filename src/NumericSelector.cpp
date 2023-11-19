@@ -17,12 +17,12 @@ uint8_t NumericSelector::getMin()   { return min; }
 uint8_t NumericSelector::getMax()   { return max; }
 
 const char* NumericSelector::getSecondaryText() {
-    if (arr==NULL) {
+    if (!arr) {
       snprintf_P(valueStr, 18, PSTR("<%d>"), variable);
     } else {
       snprintf_P(valueStr, 18, PSTR("<%s>"), arr[variable]);
     }
-    
+
     return valueStr;
 }
 
@@ -64,5 +64,5 @@ MenuItem* NumericSelector::action() {
     if (this->callback)
         this->callback(true);
 
-    return this->getParent(); 
+    return this->getParent();
 }
