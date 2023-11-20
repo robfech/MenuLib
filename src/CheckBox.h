@@ -11,7 +11,9 @@
 
 class CheckBox : public MenuItem {
     public:
-        CheckBox(MenuItem* parent, const FlashString* text, bool& variable);
+        typedef void(*SelectedCallback)(bool);
+
+        CheckBox(MenuItem* parent, const FlashString* text, bool& variable, SelectedCallback callback = NULL);
 
         char getTypeId() { return 'c'; }
 
@@ -30,6 +32,7 @@ class CheckBox : public MenuItem {
     private:
         bool& value;
         // callback pointer
+        SelectedCallback callback;
 };
 
 #endif

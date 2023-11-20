@@ -40,6 +40,15 @@ void numberSelectedCallback(bool confirmed) {
     }
 }
 
+void checkboxCallback(bool change) {
+  pinMode(LED_BUILTIN, OUTPUT);
+  if (led_active) {
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+}
+
 void setup() {
 
   Serial.begin(9600);
@@ -49,7 +58,7 @@ void setup() {
   root->addItem(new Action(root, F("Do something"), NULL));
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
-      sub->addItem(new CheckBox(sub, F("LED"), led_active));
+      sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
       sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244, numberSelectedCallback));
       sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, NULL, test_arr));
 
