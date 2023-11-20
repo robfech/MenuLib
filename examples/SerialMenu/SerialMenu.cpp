@@ -9,6 +9,7 @@ MenuController* menu = new MenuController(root, dr);
 
 uint8_t test = 10;
 char cmd;
+bool led_active = false;
 
 const char *test_arr[]={"AAAA", "BBBB", "CCCC", "DDDD"};
 uint8_t test_arr_val = 0;
@@ -37,7 +38,7 @@ void setup() {
   root->addItem(new Action(root, F("Do something"), NULL));
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
-      sub->addItem(new Action(sub, F("bbb"), NULL));
+      sub->addItem(new CheckBox(sub, F("LED"), led_active));
       sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244));
       sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, NULL, test_arr));
 
