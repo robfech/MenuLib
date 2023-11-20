@@ -12,6 +12,8 @@
 #ifndef MenuController_h
 #define MenuController_h
 
+typedef enum menu_event_t {NONE, MENU_PREV, MENU_NEXT, MENU_SELECT, MENU_BACK} menu_event_t;
+
 class MenuController {
     private:
         MenuItem* currentItem;
