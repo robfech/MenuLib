@@ -29,6 +29,17 @@ menu_event_t buttonEvent() {
   }
 }
 
+void numberSelectedCallback(bool confirmed) {
+    if (confirmed) {
+        // Number selected and confirmed
+        // Do something with the selected value eg. save in EEPROM
+        Serial.println(">>confirmed<<");
+    } else {
+        // Number selected but not confirmed
+        // Do something else eg. update brightness of LED
+    }
+}
+
 void setup() {
 
   Serial.begin(9600);
@@ -39,7 +50,7 @@ void setup() {
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active));
-      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244));
+      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244, numberSelectedCallback));
       sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, NULL, test_arr));
 
       root->addItem(sub);
