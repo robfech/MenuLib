@@ -3,6 +3,7 @@
 #include "SSD1306AsciiDrawer.h"
 
 void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
+    int itemCounter= 0;
     oled.clear();
     oled.setFont(HEADER_FONT);
     oled.print(F("Menu: "));
@@ -14,35 +15,53 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
     }
     oled.setFont(NORMAL_FONT);
 
-    ListEntry* e = menu->getCollection();
+    ListEntry* e = menu->getCollection(), *first = e;
 
-    if(!e)
-        oled.println(F("  No sub-items"));
-    else
-        while(e) {
-            if(e->item == menu->getSelectedItem())
-                oled.setInvertMode(true);
-            else
-                oled.setInvertMode(false);
+    if(!e) return;
 
-            if (e->item->isTextFlash()) {
-                const FlashString* text = reinterpret_cast<const FlashString*>(e->item->getText());
-                oled.print(text);
-            } else {
-                const char* text = e->item->getText();
-                oled.print(text);
-            }
+    do {
+      // Skip disabled items
+      if (e->item->isEnabled()) {
+        if (itemCounter% ITEMS_PER_SCREEN == 0)
+          first = e;
 
-            if(e->item->getSecondaryText()) {
-                oled.print(F("|"));
-                oled.print(e->item->getSecondaryText());
-            }
-            oled.clearToEOL();
-            oled.setInvertMode(false);
-            oled.println();
+        itemCounter++;
+      }
 
-            e = e->next;
-        }
+      if (e == menu->getSelectedListEntry())
+        break;
+
+      e = e->next;
+    } while(e);
+
+    e = first;
+    itemCounter= 0;
+
+    while(e && itemCounter< ITEMS_PER_SCREEN) {
+      if(e->item == menu->getSelectedItem())
+          oled.setInvertMode(true);
+      else
+          oled.setInvertMode(false);
+
+      if (e->item->isTextFlash()) {
+          const FlashString* text = reinterpret_cast<const FlashString*>(e->item->getText());
+          oled.print(text);
+      } else {
+          const char* text = e->item->getText();
+          oled.print(text);
+      }
+
+      if(e->item->getSecondaryText()) {
+          oled.print(F("|"));
+          oled.print(e->item->getSecondaryText());
+      }
+      oled.clearToEOL();
+      oled.setInvertMode(false);
+      oled.println();
+
+      itemCounter++;
+      e = e->next;
+  }
 }
 
 /*void SerialDrawer::drawAction(Action* action) {

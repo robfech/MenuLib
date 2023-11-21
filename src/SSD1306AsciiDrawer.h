@@ -6,19 +6,15 @@
 
 #define NORMAL_FONT X11fixed7x14
 #define HEADER_FONT X11fixed7x14B
+#define ITEMS_PER_SCREEN 3
 
 class SSD1306AsciiDrawer : public MenuItemDrawer {
-  protected:
+  private:
     SSD1306AsciiWire& oled;
 
-    // uint8_t displayRows = oled.displayRows()/oled.fontRows();
-    // uint8_t itemsPerScreen = displayRows - 1;
-
-  private:
-
-      void drawMenu(Menu* menu);
-      //void drawAction(Action<T>* action);
-      void drawSelector(NumericSelector* selector);
+    void drawMenu(Menu* menu);
+    //void drawAction(Action<T>* action);
+    void drawSelector(NumericSelector* selector);
 
   public:
     SSD1306AsciiDrawer(SSD1306AsciiWire &oled): oled(oled) {}
