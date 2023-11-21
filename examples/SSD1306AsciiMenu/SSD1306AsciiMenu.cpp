@@ -7,8 +7,6 @@
 #include "SSD1306AsciiDrawer.h"
 
 #define I2C_ADDRESS 0x3C
-// Define proper RST_PIN if required.
-#define RST_PIN -1
 SSD1306AsciiWire oled;
 
 Menu* root = new Menu(NULL, NULL);
@@ -65,11 +63,7 @@ void setup() {
   Wire.begin();
   Wire.setClock(400000L);
 
-  #if RST_PIN >= 0
-  oled.begin(&Adafruit128x64, I2C_ADDRESS, RST_PIN);
-  #else // RST_PIN >= 0
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
-  #endif // RST_PIN >= 0
 
   oled.setFont(NORMAL_FONT);
   oled.clear();
