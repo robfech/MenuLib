@@ -4,16 +4,18 @@
 
 void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
     int itemCounter= 0;
-    oled.clear();
     oled.setFont(HEADER_FONT);
+    oled.setCursor(0, 0);
     oled.print(F("Menu: "));
     if (menu->isTextFlash()) {
         const FlashString* text = reinterpret_cast<const FlashString*>(menu->getText());
-        oled.println(text);
+        oled.print(text);
     } else {
-        oled.println(menu->getText());
+        oled.print(menu->getText());
     }
     oled.setFont(NORMAL_FONT);
+    oled.clearToEOL();
+    oled.println();
 
     ListEntry* e = menu->getCollection();
 
@@ -81,8 +83,10 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
 }*/
 
 void SSD1306AsciiDrawer::drawSelector(NumericSelector* selector) {
-    oled.clear();
-    oled.println(F("Selector:"));
+    oled.setCursor(0, 0);
+    oled.print(F("Selector:"));
+    oled.clearToEOL();
+    oled.println();
 
     const FlashString* text = reinterpret_cast<const FlashString*>(selector->getText());
     oled.print(text);

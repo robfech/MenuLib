@@ -1,10 +1,11 @@
 #include "Menu.h"
 
-Menu::Menu(MenuItem* parent, const FlashString* text, MenuEnterCallback enter_cb) : MenuItem(parent, text) {
+Menu::Menu(MenuItem* parent, const FlashString* text, MenuSelectedCallback callback, MenuEnterCallback enter_cb) : MenuItem(parent, text) {
     this->firstEntry = NULL;
     this->lastEntry = NULL;
 
     this->enter_cb = enter_cb;
+    this->callback = callback;
 };
 
 MenuItem* Menu::addItem(MenuItem* item) {
@@ -51,6 +52,11 @@ bool Menu::activate() {
     // doNext();
 }
 
+void Menu::deactivate() {
+    if (this->callback)
+        this->callback(true);
+}
+
 void Menu::doNext() {
     // TODO: infinite loop if all entries are disabled??
     do {
@@ -74,6 +80,9 @@ void Menu::doPrev() {
 }
 
 MenuItem* Menu::action() {
+    if (this->callback)
+        this->callback(true);
+
     // Let's the Item do something to start
     int takeControl = selectedItem->item->activate();
 

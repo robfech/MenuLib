@@ -9,7 +9,8 @@
 #define I2C_ADDRESS 0x3C
 SSD1306AsciiWire oled;
 
-Menu* root = new Menu(NULL, NULL);
+void menuSelectedCallback(bool);
+Menu* root = new Menu(NULL, NULL, menuSelectedCallback);
 SSD1306AsciiDrawer* dr = new SSD1306AsciiDrawer(oled);
 MenuController* menu = new MenuController(root, dr);
 
@@ -47,6 +48,10 @@ void numberSelectedCallback(bool confirmed) {
     }
 }
 
+void menuSelectedCallback(bool selected) {
+  if (selected) oled.clear();
+}
+
 void checkboxCallback(bool change) {
   pinMode(LED_BUILTIN, OUTPUT);
   if (led_active) {
@@ -67,13 +72,11 @@ void setup() {
 
   oled.setFont(NORMAL_FONT);
   oled.clear();
-  oled.println("Hello World");
-
 
   root->setText(F("Menu"));
 
   root->addItem(new Action(root, F("Do something"), NULL));
-  Menu* sub = new Menu(root, F("Sub Menu"));
+  Menu* sub = new Menu(root, F("Sub Menu"), menuSelectedCallback);
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
       sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244, numberSelectedCallback));
