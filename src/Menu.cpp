@@ -44,11 +44,11 @@ bool Menu::activate() {
         this->enter_cb(this);
 
     // Select the first item when entering the menu
-    selectedItem = lastEntry;
+    selectedItem = firstEntry;
 
     // And jump to the next. If firstElement is enabled, it will stop there,
     // otherwise it will find the first enabled item.
-    doNext();
+    // doNext();
 }
 
 void Menu::doNext() {
@@ -57,7 +57,7 @@ void Menu::doNext() {
 
         selectedItem = selectedItem->next;
 
-        if(!selectedItem) selectedItem = firstEntry;
+        if(!selectedItem) selectedItem = lastEntry;
 
     } while(!selectedItem->item->isEnabled());
 }
@@ -65,10 +65,10 @@ void Menu::doNext() {
 void Menu::doPrev() {
     // TODO: infinite loop if all entries are disabled??
     do {
-        
+
         selectedItem = selectedItem->prev;
 
-        if(!selectedItem) selectedItem = lastEntry;
+        if(!selectedItem) selectedItem = firstEntry;
 
     } while(!selectedItem->item->isEnabled());
 }

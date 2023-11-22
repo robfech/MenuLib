@@ -15,30 +15,41 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
     }
     oled.setFont(NORMAL_FONT);
 
-    ListEntry* e = menu->getCollection(), *first = e;
+    ListEntry* e = menu->getCollection();
 
     if(!e) return;
 
     do {
-      // Skip disabled items
-      if (e->item->isEnabled()) {
-        if (itemCounter% ITEMS_PER_SCREEN == 0)
-          first = e;
+      if (itemCounter == 0 && e == menu->getSelectedListEntry()){
+        firstScreenItem = e;
+        lastScreenItem = e;
+        for (int i = 1; i < ITEMS_PER_SCREEN; i++) {
+          lastScreenItem = lastScreenItem->next;
+        }
+      }
 
-        itemCounter++;
+      if (menu->getSelectedListEntry() == lastScreenItem->next) {
+        firstScreenItem = firstScreenItem->next;
+        lastScreenItem = lastScreenItem->next;
+      }
+
+      if (menu->getSelectedListEntry() == firstScreenItem->prev) {
+        firstScreenItem = firstScreenItem->prev;
+        lastScreenItem = lastScreenItem->prev;
       }
 
       if (e == menu->getSelectedListEntry())
         break;
 
       e = e->next;
+      itemCounter++;
     } while(e);
 
-    e = first;
-    itemCounter= 0;
+    e = firstScreenItem;
+    itemCounter = 0;
 
-    while(e && itemCounter< ITEMS_PER_SCREEN) {
-      if(e->item == menu->getSelectedItem())
+    while(e && itemCounter < ITEMS_PER_SCREEN) {
+      if (e->item == menu->getSelectedItem())
           oled.setInvertMode(true);
       else
           oled.setInvertMode(false);

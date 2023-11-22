@@ -19,7 +19,7 @@ struct ListEntry {
     ListEntry* next;
     ListEntry* prev;
 
-    MenuItem* item; 
+    MenuItem* item;
 };
 
 class Menu : public MenuItem {
@@ -30,7 +30,7 @@ class Menu : public MenuItem {
 
         char getTypeId() { return 'm'; }
 
-        
+
         MenuItem* addItem(MenuItem* item);
         void clearItems();
 
@@ -50,7 +50,7 @@ class Menu : public MenuItem {
         void doPrev();
 
         MenuItem* action();
-        
+
     private:
         ListEntry *firstEntry, *lastEntry, *selectedItem;
 

@@ -15,6 +15,8 @@ class SSD1306AsciiDrawer : public MenuItemDrawer {
     void drawMenu(Menu* menu);
     //void drawAction(Action<T>* action);
     void drawSelector(NumericSelector* selector);
+    ListEntry* firstScreenItem;
+    ListEntry* lastScreenItem;
 
   public:
     SSD1306AsciiDrawer(SSD1306AsciiWire &oled): oled(oled) {}
