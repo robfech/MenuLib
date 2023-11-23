@@ -17,10 +17,15 @@ class SSD1306AsciiDrawer : public MenuItemDrawer {
     void drawSelector(NumericSelector* selector);
     ListEntry* firstScreenItem;
     ListEntry* lastScreenItem;
+    uint8_t onScreenSelectedItem;
+    uint8_t colSecondary;
 
   public:
-    SSD1306AsciiDrawer(SSD1306AsciiWire &oled): oled(oled) {}
+    SSD1306AsciiDrawer(SSD1306AsciiWire &oled, uint8_t colSecondary = 12*7)  : oled(oled) {
+      this->colSecondary = colSecondary;
+    }
     void draw(MenuItem* item);
+
 };
 
 #endif

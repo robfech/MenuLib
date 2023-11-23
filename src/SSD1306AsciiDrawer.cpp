@@ -47,6 +47,18 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
       itemCounter++;
     } while(e);
 
+
+    e = firstScreenItem;
+    onScreenSelectedItem = 1;
+    do{
+      if(menu->getSelectedListEntry() == e){
+        break;
+      }
+      onScreenSelectedItem++;
+      e = e->next;
+    } while(e);
+
+
     e = firstScreenItem;
     itemCounter = 0;
 
@@ -63,13 +75,13 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
           const char* text = e->item->getText();
           oled.print(text);
       }
-
+      oled.clear(oled.col(), colSecondary, oled.row(), oled.row()+1);
+      oled.setInvertMode(false);
       if(e->item->getSecondaryText()) {
-          oled.print(F("|"));
-          oled.print(e->item->getSecondaryText());
+        oled.setCursor(colSecondary, oled.row());
+        oled.print(e->item->getSecondaryText());
       }
       oled.clearToEOL();
-      oled.setInvertMode(false);
       oled.println();
 
       itemCounter++;
@@ -83,17 +95,10 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
 }*/
 
 void SSD1306AsciiDrawer::drawSelector(NumericSelector* selector) {
-    oled.setCursor(0, 0);
-    oled.print(F("Selector:"));
-    oled.clearToEOL();
-    oled.println();
-
-    const FlashString* text = reinterpret_cast<const FlashString*>(selector->getText());
-    oled.print(text);
-
-    oled.print(F(" <"));
+    oled.setCursor(colSecondary, oled.fontRows() * onScreenSelectedItem);
+    oled.setInvertMode(true);
     oled.print(selector->getSecondaryText());
-    oled.print(F(">"));
+    oled.setInvertMode(false);
     oled.clearToEOL();
 }
 

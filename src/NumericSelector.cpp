@@ -18,9 +18,9 @@ uint8_t NumericSelector::getMax()   { return max; }
 
 const char* NumericSelector::getSecondaryText() {
     if (!arr) {
-      snprintf_P(valueStr, 18, PSTR("<%d>"), variable);
+      snprintf_P(valueStr, 18, PSTR("%d"), variable);
     } else {
-      snprintf_P(valueStr, 18, PSTR("<%s>"), arr[variable]);
+      snprintf_P(valueStr, 18, PSTR("%s"), arr[variable]);
     }
 
     return valueStr;

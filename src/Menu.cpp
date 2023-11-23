@@ -44,6 +44,9 @@ bool Menu::activate() {
     if (this->enter_cb)
         this->enter_cb(this);
 
+    if (this->callback)
+        this->callback(true);
+
     // Select the first item when entering the menu
     selectedItem = firstEntry;
 
@@ -80,8 +83,6 @@ void Menu::doPrev() {
 }
 
 MenuItem* Menu::action() {
-    if (this->callback)
-        this->callback(true);
 
     // Let's the Item do something to start
     int takeControl = selectedItem->item->activate();
