@@ -19,18 +19,19 @@ struct ListEntry {
     ListEntry* next;
     ListEntry* prev;
 
-    MenuItem* item; 
+    MenuItem* item;
 };
 
 class Menu : public MenuItem {
     public:
         typedef void(*MenuEnterCallback)(Menu*);
+        typedef void(*MenuSelectedCallback)(bool);
 
-        Menu(MenuItem* parent, const FlashString* text, MenuEnterCallback enter_cb = NULL);
+        Menu(MenuItem* parent, const FlashString* text, MenuSelectedCallback callback = NULL, MenuEnterCallback enter_cb = NULL);
 
         char getTypeId() { return 'm'; }
 
-        
+
         MenuItem* addItem(MenuItem* item);
         void clearItems();
 
@@ -42,7 +43,7 @@ class Menu : public MenuItem {
         // MenuItem fields
 
         bool activate();
-        void deactivate() {}
+        void deactivate();
 
         // Selects the next item in the list
         void doNext();
@@ -50,11 +51,12 @@ class Menu : public MenuItem {
         void doPrev();
 
         MenuItem* action();
-        
+
     private:
         ListEntry *firstEntry, *lastEntry, *selectedItem;
 
         MenuEnterCallback enter_cb;
+        MenuSelectedCallback callback;
 
 };
 

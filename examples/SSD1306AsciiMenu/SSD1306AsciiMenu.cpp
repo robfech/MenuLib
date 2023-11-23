@@ -1,9 +1,17 @@
 #include <Arduino.h>
 
+#include <Wire.h>
+#include "SSD1306Ascii.h"
+#include "SSD1306AsciiWire.h"
 #include <MenuLib.h>
+#include "SSD1306AsciiDrawer.h"
 
-Menu* root = new Menu(NULL, NULL);
-SerialDrawer* dr = new SerialDrawer();
+#define I2C_ADDRESS 0x3C
+SSD1306AsciiWire oled;
+
+void menuSelectedCallback(bool);
+Menu* root = new Menu(NULL, NULL, menuSelectedCallback);
+SSD1306AsciiDrawer* dr = new SSD1306AsciiDrawer(oled);
 MenuController* menu = new MenuController(root, dr);
 
 
@@ -40,6 +48,10 @@ void numberSelectedCallback(bool confirmed) {
     }
 }
 
+void menuSelectedCallback(bool selected) {
+  if (selected) oled.clear();
+}
+
 void checkboxCallback(bool change) {
   pinMode(LED_BUILTIN, OUTPUT);
   if (led_active) {
@@ -53,10 +65,18 @@ void setup() {
 
   Serial.begin(9600);
 
+  Wire.begin();
+  Wire.setClock(400000L);
+
+  oled.begin(&Adafruit128x64, I2C_ADDRESS);
+
+  oled.setFont(NORMAL_FONT);
+  oled.clear();
+
   root->setText(F("Menu"));
 
   root->addItem(new Action(root, F("Do something"), NULL));
-  Menu* sub = new Menu(root, F("Sub Menu"));
+  Menu* sub = new Menu(root, F("Sub Menu"), menuSelectedCallback);
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
       sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244, numberSelectedCallback));
@@ -83,14 +103,14 @@ void loop() {
 }
 
 void test_action() {
-  Serial.print(F("Action: "));
+  oled.clear();
+  oled.print(F("Action: "));
   for (int i=0; i < 10; i++) {
     // if select or return button is pushed exit the function and go back to menu
     menu_event_t event = buttonEvent();
     if ((event == MENU_BACK) || (event == MENU_SELECT)) break;
 
-    Serial.print(F("."));
+    oled.print(F("."));
     delay(200);
   }
-  Serial.print(F("\n"));
 }
