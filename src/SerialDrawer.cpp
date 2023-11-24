@@ -11,7 +11,7 @@ void SerialDrawer::drawMenu(Menu* menu) {
         Serial.println(menu->getText());
     }
 
-    ListEntry* e = menu->getCollection();
+    ListEntry* e = menu->getFirstDrawerEntry();
 
     if(!e)
         Serial.println(F("  No sub-items"));
@@ -37,6 +37,7 @@ void SerialDrawer::drawMenu(Menu* menu) {
 
             Serial.println();
 
+            if ( e == menu->getLastDrawerEntry()) break;
             e = e->next;
         }
 }
