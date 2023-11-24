@@ -53,7 +53,7 @@ class Menu : public MenuItem {
         MenuItem* action();
 
     private:
-        ListEntry *firstEntry, *lastEntry, *selectedItem;
+        ListEntry *firstEntry, *lastEntry, *selectedItem, *prevSelectedItem;
 
         MenuEnterCallback enter_cb;
         MenuSelectedCallback callback;

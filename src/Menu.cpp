@@ -20,6 +20,7 @@ MenuItem* Menu::addItem(MenuItem* item) {
     lastEntry = e;
 
     selectedItem = firstEntry;
+    prevSelectedItem = firstEntry;
 
     return item;
 }
@@ -48,7 +49,7 @@ bool Menu::activate() {
         this->callback(true);
 
     // Select the first item when entering the menu
-    selectedItem = firstEntry;
+    selectedItem = prevSelectedItem;
 
     // And jump to the next. If firstElement is enabled, it will stop there,
     // otherwise it will find the first enabled item.
@@ -56,6 +57,7 @@ bool Menu::activate() {
 }
 
 void Menu::deactivate() {
+    prevSelectedItem = firstEntry;
     if (this->callback)
         this->callback(true);
 }
@@ -83,7 +85,7 @@ void Menu::doPrev() {
 }
 
 MenuItem* Menu::action() {
-
+    prevSelectedItem = selectedItem;
     // Let's the Item do something to start
     int takeControl = selectedItem->item->activate();
 
