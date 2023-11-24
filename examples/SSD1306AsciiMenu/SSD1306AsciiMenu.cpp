@@ -66,11 +66,6 @@ void setup() {
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
 
   oled.setFont(NORMAL_FONT);
-  oled.println(oled.row());
-  oled.println(oled.row());
-  oled.println(oled.row());
-  oled.println(oled.row());
-  delay(2000);
   oled.clear();
 
   root->setText(F("Menu"));
