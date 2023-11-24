@@ -40,10 +40,15 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
         oled.print(e->item->getSecondaryText());
       }
       oled.clearToEOL();
+
+      if ( e == menu->getLastDrawerEntry()) {
+        oled.clear(0, oled.displayWidth() - 1, oled.row() + oled.fontRows(), oled.displayRows());
+        break;
+      }
+
       oled.println();
 
-      if ( e == menu->getLastDrawerEntry()) break;
-      
+
       e = e->next;
   }
   selectedLine = menu->getSelectedLine();

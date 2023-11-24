@@ -25,11 +25,10 @@ struct ListEntry {
 class Menu : public MenuItem {
     public:
         typedef void(*MenuEnterCallback)(Menu*);
-        typedef void(*MenuSelectedCallback)(bool);
         uint8_t drawerLines;
 
 
-        Menu(MenuItem* parent, const FlashString* text, MenuSelectedCallback callback = NULL, MenuEnterCallback enter_cb = NULL, uint8_t drawerLines = 3);
+        Menu(MenuItem* parent, const FlashString* text, MenuEnterCallback enter_cb = NULL, uint8_t drawerLines = 3);
 
         char getTypeId() { return 'm'; }
 
@@ -61,7 +60,6 @@ class Menu : public MenuItem {
         ListEntry *firstEntry, *lastEntry, *selectedItem, *prevSelectedItem, *firstDrawerEntry, *lastDrawerEntry;
 
         MenuEnterCallback enter_cb;
-        MenuSelectedCallback callback;
         uint8_t selectedLine;
 
 

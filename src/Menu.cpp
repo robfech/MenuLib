@@ -1,11 +1,10 @@
 #include "Menu.h"
 
-Menu::Menu(MenuItem* parent, const FlashString* text, MenuSelectedCallback callback, MenuEnterCallback enter_cb, uint8_t drawerLines) : MenuItem(parent, text) {
+Menu::Menu(MenuItem* parent, const FlashString* text, MenuEnterCallback enter_cb, uint8_t drawerLines) : MenuItem(parent, text) {
     this->firstEntry = NULL;
     this->lastEntry = NULL;
 
     this->enter_cb = enter_cb;
-    this->callback = callback;
     this->drawerLines = drawerLines;
 };
 
@@ -55,8 +54,6 @@ bool Menu::activate() {
     if (this->enter_cb)
         this->enter_cb(this);
 
-    if (this->callback)
-        this->callback(true);
 
     // Select the previous selected item when entering the menu
     selectedItem = prevSelectedItem;
@@ -78,8 +75,6 @@ void Menu::deactivate() {
     }
     selectedLine = 1;
 
-    if (this->callback)
-        this->callback(true);
 }
 
 void Menu::doNext() {
