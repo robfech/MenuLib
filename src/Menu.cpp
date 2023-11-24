@@ -1,11 +1,11 @@
 #include "Menu.h"
 
-Menu::Menu(MenuItem* parent, const FlashString* text, MenuSelectedCallback callback, MenuEnterCallback enter_cb) : MenuItem(parent, text) {
+Menu::Menu(MenuItem* parent, const FlashString* text, MenuEnterCallback enter_cb, uint8_t drawerLines) : MenuItem(parent, text) {
     this->firstEntry = NULL;
     this->lastEntry = NULL;
 
     this->enter_cb = enter_cb;
-    this->callback = callback;
+    this->drawerLines = drawerLines;
 };
 
 MenuItem* Menu::addItem(MenuItem* item) {
@@ -20,6 +20,16 @@ MenuItem* Menu::addItem(MenuItem* item) {
     lastEntry = e;
 
     selectedItem = firstEntry;
+    prevSelectedItem = firstEntry;
+    firstDrawerEntry = firstEntry;
+
+    ListEntry* ee = this->firstDrawerEntry;
+    for (int i = 0; i < drawerLines; i++) {
+      if (!ee) break;
+      lastDrawerEntry = ee;
+      ee = ee->next;
+    }
+    selectedLine = 1;
 
     return item;
 }
@@ -44,11 +54,9 @@ bool Menu::activate() {
     if (this->enter_cb)
         this->enter_cb(this);
 
-    if (this->callback)
-        this->callback(true);
 
-    // Select the first item when entering the menu
-    selectedItem = firstEntry;
+    // Select the previous selected item when entering the menu
+    selectedItem = prevSelectedItem;
 
     // And jump to the next. If firstElement is enabled, it will stop there,
     // otherwise it will find the first enabled item.
@@ -56,34 +64,60 @@ bool Menu::activate() {
 }
 
 void Menu::deactivate() {
-    if (this->callback)
-        this->callback(true);
+    prevSelectedItem = firstEntry;
+    firstDrawerEntry = firstEntry;
+
+    ListEntry* e = firstDrawerEntry;
+    for (int i = 0; i < drawerLines; i++) {
+      if (!e) break;
+      lastDrawerEntry = e;
+      e = e->next;
+    }
+    selectedLine = 1;
+
 }
 
 void Menu::doNext() {
-    // TODO: infinite loop if all entries are disabled??
-    do {
-
-        selectedItem = selectedItem->next;
-
-        if(!selectedItem) selectedItem = lastEntry;
-
-    } while(!selectedItem->item->isEnabled());
+  selectedItem = selectedItem->next;
+  if (selectedItem) {
+    selectedLine++;
+    if (selectedLine > drawerLines) selectedLine = drawerLines;
+    if (selectedItem->prev == lastDrawerEntry){
+      lastDrawerEntry = selectedItem;
+      firstDrawerEntry =  firstDrawerEntry->next;
+    }
+  }
+  else {
+      selectedItem = lastEntry;
+  }
 }
 
 void Menu::doPrev() {
-    // TODO: infinite loop if all entries are disabled??
-    do {
+  selectedItem = selectedItem->prev;
+  if (selectedItem){
+    selectedLine--;
+    if (selectedLine < 1) selectedLine = 1;
+    if (selectedItem->next == firstDrawerEntry){
+      firstDrawerEntry = selectedItem;
+      lastDrawerEntry =  lastDrawerEntry->prev;
+    }
+  }
+  else {
+    selectedItem = firstEntry;
+  }
 
-        selectedItem = selectedItem->prev;
-
-        if(!selectedItem) selectedItem = firstEntry;
-
-    } while(!selectedItem->item->isEnabled());
+    // // TODO: infinite loop if all entries are disabled??
+    // do {
+    //
+    //     selectedItem = selectedItem->prev;
+    //
+    //     if(!selectedItem) selectedItem = firstEntry;
+    //
+    // } while(!selectedItem->item->isEnabled());
 }
 
 MenuItem* Menu::action() {
-
+    prevSelectedItem = selectedItem;
     // Let's the Item do something to start
     int takeControl = selectedItem->item->activate();
 
