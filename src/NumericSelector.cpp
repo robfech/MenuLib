@@ -41,8 +41,8 @@ void NumericSelector::deactivate() {
 }
 
 void NumericSelector::doNext() {
-    if(variable == this->max)
-        variable = this->min;
+    if(variable >= this->max)
+        variable = this->max;
     else
         variable++;
 
@@ -51,8 +51,8 @@ void NumericSelector::doNext() {
 
 }
 void NumericSelector::doPrev() {
-    if(variable == this->min)
-        variable = this->max;
+    if(variable <= this->min)
+        variable = this->min;
     else
         variable--;
 
