@@ -13,11 +13,6 @@ template <class T> class ParamAction : public MenuItem {
     public:
         typedef void(*ActionCallback)(T);
 
-        ParamAction(MenuItem* parent, const char* text, ActionCallback callback, T data): MenuItem(parent, text) {
-            this->callback = callback;
-            this->data = data;
-        }
-
         ParamAction(MenuItem* parent, const FlashString* text, ActionCallback callback, T data): MenuItem(parent, text) {
             this->callback = callback;
             this->data = data;
@@ -28,7 +23,7 @@ template <class T> class ParamAction : public MenuItem {
         // MenuItem fields
 
         // When activated from parent menu, trigger the callback and don't take control.
-        bool activate() { 
+        bool activate() {
             if (this->callback)
                 this->callback(this->data);
 
@@ -51,10 +46,6 @@ class Action : public MenuItem {
     public:
         typedef void(*ActionCallback)(void);
 
-        Action(MenuItem* parent, const char* text, ActionCallback callback): MenuItem(parent, text) {
-            setCallback(callback);
-        }
-
         Action(MenuItem* parent, const FlashString* text, ActionCallback callback): MenuItem(parent, text) {
             setCallback(callback);
         }
@@ -67,7 +58,7 @@ class Action : public MenuItem {
         // MenuItem fields
 
         // When activated from parent menu, trigger the callback and don't take control.
-        bool activate() { 
+        bool activate() {
             if (this->callback)
                 this->callback();
 

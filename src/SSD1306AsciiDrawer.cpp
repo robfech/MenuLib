@@ -6,15 +6,11 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
     oled.setFont(HEADER_FONT);
     oled.setCursor(0, 0);
     oled.print(F("Menu: "));
-    if (menu->isTextFlash()) {
-        const FlashString* text = reinterpret_cast<const FlashString*>(menu->getText());
-        oled.print(text);
-    } else {
-        oled.print(menu->getText());
-    }
-    oled.setFont(NORMAL_FONT);
+    const FlashString* text = reinterpret_cast<const FlashString*>(menu->getText());
+    oled.print(text);
     oled.clearToEOL();
     oled.println();
+    oled.setFont(NORMAL_FONT);
 
     ListEntry* e = menu->getFirstDrawerEntry();
 
@@ -26,13 +22,8 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
       else
           oled.setInvertMode(false);
 
-      if (e->item->isTextFlash()) {
-          const FlashString* text = reinterpret_cast<const FlashString*>(e->item->getText());
-          oled.print(text);
-      } else {
-          const char* text = e->item->getText();
-          oled.print(text);
-      }
+      const FlashString* text = reinterpret_cast<const FlashString*>(e->item->getText());
+      oled.print(text);
       oled.clear(oled.col(), colSecondary, oled.row(), oled.row()+1);
       oled.setInvertMode(false);
       if(e->item->getSecondaryText()) {

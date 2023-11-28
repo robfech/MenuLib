@@ -12,18 +12,15 @@ class MenuItem {
         MenuItem* parent;
 
         const char* text;
-        bool is_flash, enabled;
+        bool enabled;
     public:
         MenuItem(MenuItem* parent, const FlashString* text) : parent(parent), enabled(true) { setText(text); }
-        MenuItem(MenuItem* parent, const char* text)        : parent(parent), enabled(true) { setText(text); }
 
         virtual MenuItem* getParent() { return parent; }
         virtual void setParent(MenuItem* parent) { this->parent = parent; }
 
-        virtual bool isTextFlash() { return is_flash; }
         virtual const char* getText() { return text; }
-        virtual void  setText(const FlashString* text) { this->is_flash = 1; this->text = reinterpret_cast<PGM_P>(text); }
-        virtual void  setText(const char *text)                { this->is_flash = 0; this->text = text; }
+        virtual void  setText(const FlashString* text) { this->text = reinterpret_cast<PGM_P>(text); }
 
         virtual const char* getSecondaryText() { return NULL; }
 
@@ -39,11 +36,11 @@ class MenuItem {
            Se false: l'oggetto ritornerà subito il controllo al padre.
         */
         virtual bool activate() = 0;
-        
+
         // Triggered when the current action is cancelled. (Back button pressed)
         // TODO: Determine what this function can return
         virtual void deactivate() = 0;
-        
+
         // This events are triggerd only if the item is active.
         // ------
 

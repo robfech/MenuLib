@@ -4,12 +4,8 @@
 
 void SerialDrawer::drawMenu(Menu* menu) {
     Serial.print(F("Menu: "));
-    if (menu->isTextFlash()) {
-        const FlashString* text = reinterpret_cast<const FlashString*>(menu->getText());
-        Serial.println(text);
-    } else {
-        Serial.println(menu->getText());
-    }
+    const FlashString* text = reinterpret_cast<const FlashString*>(menu->getText());
+    Serial.println(text);
 
     ListEntry* e = menu->getFirstDrawerEntry();
 
@@ -22,13 +18,8 @@ void SerialDrawer::drawMenu(Menu* menu) {
             else
                 Serial.print(F("     "));
 
-            if (e->item->isTextFlash()) {
-                const FlashString* text = reinterpret_cast<const FlashString*>(e->item->getText());
-                Serial.print(text);
-            } else {
-                const char* text = e->item->getText();
-                Serial.print(text);
-            }
+            const FlashString* text = reinterpret_cast<const FlashString*>(e->item->getText());
+            Serial.print(text);
 
             if(e->item->getSecondaryText()) {
                 Serial.print(F(" | "));
