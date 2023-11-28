@@ -28,12 +28,14 @@ const char* NumericSelector::getSecondaryText() {
 
 bool NumericSelector::activate() {
     oldValue = variable;
+    setEditingState(true);
 
     return 1;
 }
 
 void NumericSelector::deactivate() {
     variable = oldValue;
+    setEditingState(false);
 
     // On cancel restore the value
     if (this->callback)
@@ -61,6 +63,7 @@ void NumericSelector::doPrev() {
 }
 
 MenuItem* NumericSelector::action() {
+    setEditingState(false);
     if (this->callback)
         this->callback(true);
 

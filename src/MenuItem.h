@@ -12,9 +12,9 @@ class MenuItem {
         MenuItem* parent;
 
         const char* text;
-        bool enabled;
+        bool enabled, edited;
     public:
-        MenuItem(MenuItem* parent, const FlashString* text) : parent(parent), enabled(true) { setText(text); }
+        MenuItem(MenuItem* parent, const FlashString* text) : parent(parent), enabled(true), edited(false) { setText(text); }
 
         virtual MenuItem* getParent() { return parent; }
         virtual void setParent(MenuItem* parent) { this->parent = parent; }
@@ -28,6 +28,9 @@ class MenuItem {
 
         virtual bool isEnabled() { return this->enabled; }
         virtual void setState(bool enabled) { this->enabled = enabled; }
+
+        virtual bool isEdited() { return this->edited; }
+        virtual void setEditingState(bool edited) { this->edited = edited; }
 
         // Called when the parent menu select the item
 

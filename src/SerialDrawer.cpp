@@ -23,7 +23,9 @@ void SerialDrawer::drawMenu(Menu* menu) {
 
             if(e->item->getSecondaryText()) {
                 Serial.print(F(" | "));
+                if (e->item->isEdited()) Serial.print(">");
                 Serial.print(e->item->getSecondaryText());
+                if (e->item->isEdited()) Serial.print("<");
             }
 
             Serial.println();
@@ -39,14 +41,8 @@ void SerialDrawer::drawMenu(Menu* menu) {
 }*/
 
 void SerialDrawer::drawSelector(NumericSelector* selector) {
-    Serial.print(F("Selector: "));
-
-    const FlashString* text = reinterpret_cast<const FlashString*>(selector->getText());
-    Serial.print(text);
-
-    Serial.print(F(" <"));
-    Serial.print(selector->getSecondaryText());
-    Serial.println(F(">"));
+    MenuItem *prev = selector->getParent();
+    drawMenu((Menu*)prev);
 }
 
 void SerialDrawer::draw(MenuItem* item) {

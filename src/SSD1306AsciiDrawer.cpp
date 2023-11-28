@@ -17,7 +17,7 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
     if(!e) return;
 
     while(e) {
-      if (e->item == menu->getSelectedItem())
+      if (e->item == menu->getSelectedItem() && !e->item->isEdited())
           oled.setInvertMode(true);
       else
           oled.setInvertMode(false);
@@ -28,7 +28,9 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
       oled.setInvertMode(false);
       if(e->item->getSecondaryText()) {
         oled.setCursor(colSecondary, oled.row());
+        if (e->item->isEdited()) oled.setInvertMode(true);
         oled.print(e->item->getSecondaryText());
+        oled.setInvertMode(false);
       }
       oled.clearToEOL();
 
@@ -51,11 +53,8 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
 }*/
 
 void SSD1306AsciiDrawer::drawSelector(NumericSelector* selector) {
-    oled.setCursor(colSecondary, oled.fontRows() * selectedLine);
-    oled.setInvertMode(true);
-    oled.print(selector->getSecondaryText());
-    oled.setInvertMode(false);
-    oled.clearToEOL();
+    MenuItem *prev = selector->getParent();
+    drawMenu((Menu*)prev);
 }
 
 void SSD1306AsciiDrawer::draw(MenuItem* item) {
