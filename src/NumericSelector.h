@@ -16,11 +16,12 @@ class NumericSelector : public MenuItem {
     public:
         typedef void(*NumberSelectedCallback)(bool);
 
-        NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback = NULL, const char** arr = NULL);
+        NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, uint8_t stepSize = 1, NumberSelectedCallback callback = NULL, const char** arr = NULL);
 
         uint8_t getValue();
         uint8_t getMin();
         uint8_t getMax();
+        uint8_t getStepSize();
 
         char getTypeId() { return (arr?'t':'s'); }; //s - numeric selector; t - array selector
 
@@ -36,7 +37,7 @@ class NumericSelector : public MenuItem {
 
     private:
         uint8_t& variable;
-        uint8_t oldValue, min, max;
+        uint8_t oldValue, min, max, stepSize;
 
         const char** arr = NULL;
 

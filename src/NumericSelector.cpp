@@ -1,8 +1,9 @@
 #include "NumericSelector.h"
 
-NumericSelector::NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, NumberSelectedCallback callback, const char** arr) : MenuItem(parent, text), variable(variable) {
+NumericSelector::NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, uint8_t stepSize, NumberSelectedCallback callback, const char** arr) : MenuItem(parent, text), variable(variable) {
     this->min = min;
     this->max = max;
+    this->stepSize = stepSize;
 
     this->callback = callback;
 
@@ -15,6 +16,7 @@ NumericSelector::NumericSelector(MenuItem* parent, const FlashString* text, uint
 uint8_t NumericSelector::getValue() { return variable; }
 uint8_t NumericSelector::getMin()   { return min; }
 uint8_t NumericSelector::getMax()   { return max; }
+uint8_t NumericSelector::getStepSize() { return stepSize; }
 
 const char* NumericSelector::getSecondaryText() {
     if (!arr) {
@@ -43,20 +45,21 @@ void NumericSelector::deactivate() {
 }
 
 void NumericSelector::doNext() {
-    if(variable >= this->max)
+    if(variable + stepSize >= this->max)
         variable = this->max;
     else
-        variable++;
+        variable = variable + stepSize;
 
     if (this->callback)
         this->callback(false);
 
 }
+
 void NumericSelector::doPrev() {
-    if(variable <= this->min)
+    if(variable - stepSize <= this->min)
         variable = this->min;
     else
-        variable--;
+        variable = variable - stepSize;
 
     if (this->callback)
         this->callback(false);

@@ -59,8 +59,8 @@ void setup() {
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
-      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 244, numberSelectedCallback));
-      sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, NULL, test_arr));
+      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 255, 5, numberSelectedCallback));
+      sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, 1, NULL, test_arr));
 
       root->addItem(sub);
 
