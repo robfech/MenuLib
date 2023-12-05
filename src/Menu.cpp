@@ -61,6 +61,7 @@ bool Menu::activate() {
     // And jump to the next. If firstElement is enabled, it will stop there,
     // otherwise it will find the first enabled item.
     // doNext();
+    return 1;
 }
 
 void Menu::deactivate() {
