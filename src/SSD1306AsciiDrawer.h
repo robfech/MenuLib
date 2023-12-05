@@ -14,7 +14,9 @@ class SSD1306AsciiDrawer : public MenuItemDrawer {
 
     void drawMenu(Menu* menu);
     //void drawAction(Action<T>* action);
-    void drawSelector(NumericSelector* selector);
+    void drawSelector(NumericSelectorUint8* selector);
+    void drawSelector(NumericSelectorInt16* selector);
+    void drawSelector(NumericSelectorList* selector);
     uint8_t colSecondary;
     uint8_t selectedLine;
 

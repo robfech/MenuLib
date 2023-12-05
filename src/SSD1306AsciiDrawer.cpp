@@ -52,26 +52,41 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
     Serial.println(action->getText());
 }*/
 
-void SSD1306AsciiDrawer::drawSelector(NumericSelector* selector) {
+void SSD1306AsciiDrawer::drawSelector(NumericSelectorUint8* selector) {
+    MenuItem *prev = selector->getParent();
+    drawMenu((Menu*)prev);
+}
+
+void SSD1306AsciiDrawer::drawSelector(NumericSelectorInt16* selector) {
+    MenuItem *prev = selector->getParent();
+    drawMenu((Menu*)prev);
+}
+
+void SSD1306AsciiDrawer::drawSelector(NumericSelectorList* selector) {
     MenuItem *prev = selector->getParent();
     drawMenu((Menu*)prev);
 }
 
 void SSD1306AsciiDrawer::draw(MenuItem* item) {
-    if(!item) return;
+  if(!item) return;
 
-    switch(item->getTypeId()) {
-        case 'm':
-            drawMenu((Menu*)item);
-            break;
+  switch(item->getTypeId()) {
+    case 'm':
+      drawMenu((Menu*)item);
+      break;
 
-        /*case 'a':
-            drawAction((Action*)item);
-            break;
-        */
-        case 't':
-        case 's':
-            drawSelector((NumericSelector*)item);
-            break;
-    }
+    /*case 'a':
+        drawAction((Action*)item);
+        break;
+    */
+    case 'b':
+      drawSelector((NumericSelectorUint8*)item);
+      break;
+    case 'i':
+        drawSelector((NumericSelectorInt16*)item);
+        break;
+    case 'l':
+      drawSelector((NumericSelectorList*)item);
+      break;
+  }
 }

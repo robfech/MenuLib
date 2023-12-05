@@ -14,7 +14,7 @@ void SerialDrawer::drawMenu(Menu* menu) {
     else
         while(e) {
             if(e->item == menu->getSelectedItem())
-                Serial.print(F("   ->"));
+                Serial.print(F("  -> "));
             else
                 Serial.print(F("     "));
 
@@ -40,26 +40,41 @@ void SerialDrawer::drawMenu(Menu* menu) {
     Serial.println(action->getText());
 }*/
 
-void SerialDrawer::drawSelector(NumericSelector* selector) {
+void SerialDrawer::drawSelector(NumericSelectorUint8* selector) {
+    MenuItem *prev = selector->getParent();
+    drawMenu((Menu*)prev);
+}
+
+void SerialDrawer::drawSelector(NumericSelectorInt16* selector) {
+    MenuItem *prev = selector->getParent();
+    drawMenu((Menu*)prev);
+}
+
+void SerialDrawer::drawSelector(NumericSelectorList* selector) {
     MenuItem *prev = selector->getParent();
     drawMenu((Menu*)prev);
 }
 
 void SerialDrawer::draw(MenuItem* item) {
-    if(!item) return;
+  if(!item) return;
 
-    switch(item->getTypeId()) {
-        case 'm':
-            drawMenu((Menu*)item);
-            break;
+  switch(item->getTypeId()) {
+    case 'm':
+      drawMenu((Menu*)item);
+      break;
 
-        /*case 'a':
-            drawAction((Action*)item);
-            break;
-        */
-        case 't':
-        case 's':
-            drawSelector((NumericSelector*)item);
-            break;
-    }
+    /*case 'a':
+        drawAction((Action*)item);
+        break;
+    */
+    case 'b':
+      drawSelector((NumericSelectorUint8*)item);
+      break;
+    case 'i':
+        drawSelector((NumericSelectorInt16*)item);
+        break;
+    case 'l':
+      drawSelector((NumericSelectorList*)item);
+      break;
+  }
 }

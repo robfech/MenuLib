@@ -7,13 +7,14 @@ SerialDrawer* dr = new SerialDrawer();
 MenuController* menu = new MenuController(root, dr);
 
 
-uint8_t test = 10;
+uint8_t test_uint8 = 10;
+int16_t test_int16 = 1000;
 char cmd;
 bool led_active = false;
 
 const char *test_arr[]={"AAAA", "BBBB", "CCCC", "DDDD"};
 uint8_t test_arr_val = 0;
-uint8_t test_arr_max = 3;
+uint8_t test_arr_max = sizeof(test_arr)/sizeof(*test_arr) - 1;
 
 void test_action();
 
@@ -59,8 +60,9 @@ void setup() {
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
-      sub->addItem(new NumericSelector(sub, F("Test value"), test, 0, 255, 5, numberSelectedCallback));
-      sub->addItem(new NumericSelector(sub, F("Test value"), test_arr_val, 0, test_arr_max, 1, NULL, test_arr));
+      sub->addItem(new NumericSelectorUint8(sub, F("uInt8 value"), test_uint8, 0, 255, 5, numberSelectedCallback));
+      sub->addItem(new NumericSelectorInt16(sub, F("Int16 value"), test_int16, 0, 10000, 1000, numberSelectedCallback));
+      sub->addItem(new NumericSelectorList(sub, F("List value "), test_arr_val, test_arr_max, test_arr));
 
       root->addItem(sub);
 

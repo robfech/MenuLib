@@ -6,44 +6,127 @@
 
 #include <Arduino.h>
 
-
 #include "MenuItem.h"
 
 #ifndef NumericSelector_h
 #define NumericSelector_h
 
 class NumericSelector : public MenuItem {
-    public:
-        typedef void(*NumberSelectedCallback)(bool);
+public:
+  typedef void (*SelectCallback)(bool);
+  NumericSelector(MenuItem *parent, const FlashString *text,
+                SelectCallback callback = NULL);
 
-        NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, uint8_t stepSize = 1, NumberSelectedCallback callback = NULL, const char** arr = NULL);
+  template <class T> bool activateT(T &val, T &oldVal) {
+    oldVal = val;
+    setEditingState(true);
+    return 1;
+  }
 
-        uint8_t getValue();
-        uint8_t getMin();
-        uint8_t getMax();
-        uint8_t getStepSize();
+  template <class T> void deactivateT(T &val, T &oldVal) {
+    val = oldVal;
+    setEditingState(false);
+    if (callback)
+      callback(false);
+  }
 
-        char getTypeId() { return (arr?'t':'s'); }; //s - numeric selector; t - array selector
+  template <class T> void doNextT(T &val, T upper, T incr) {
+    if (val + incr > upper)
+      val = upper;
+    else
+      val += incr;
+    if (callback)
+      callback(false);
+  }
 
-        const char* getSecondaryText();
+  template <class T> void doPrevT(T &val, T lower, T incr) {
+    if (val - incr < lower)
+      val = lower;
+    else
+      val -= incr;
+    if (callback)
+      callback(false);
+  }
 
-        bool activate();
-        void deactivate();
+  MenuItem *action();
 
-        void doNext();
-        void doPrev();
+private:
+  SelectCallback callback;
+};
 
-        MenuItem* action();
+class NumericSelectorUint8 : public NumericSelector {
+public:
+  typedef void (*SelectCallback)(bool);
 
-    private:
-        uint8_t& variable;
-        uint8_t oldValue, min, max, stepSize;
+  NumericSelectorUint8(MenuItem *parent, const FlashString *text,
+                     uint8_t &variable, uint8_t lower, uint8_t upper,
+                     uint8_t stepSize = 1,
+                     SelectCallback callback = NULL);
 
-        const char** arr = NULL;
+  char getTypeId() { return 'b'; };
 
-        char valueStr[18];
+  const char *getSecondaryText();
 
-        NumberSelectedCallback callback;
+  bool activate();
+  void deactivate();
+
+  void doNext();
+  void doPrev();
+
+private:
+  uint8_t &variable;
+  uint8_t oldValue, lower, upper, stepSize;
+  char valueStr[18];
+};
+
+class NumericSelectorInt16 : public NumericSelector {
+public:
+  typedef void (*SelectCallback)(bool);
+
+  NumericSelectorInt16(MenuItem *parent, const FlashString *text,
+                     int16_t &variable, int16_t lower, int16_t upper,
+                     int16_t stepSize = 1,
+                     SelectCallback callback = NULL);
+
+  char getTypeId() { return 'i'; };
+
+  const char *getSecondaryText();
+
+  bool activate();
+  void deactivate();
+
+  void doNext();
+  void doPrev();
+
+private:
+  int16_t &variable;
+  int16_t oldValue, lower, upper, stepSize;
+  char valueStr[18];
+};
+
+class NumericSelectorList : public NumericSelector {
+public:
+  typedef void (*SelectCallback)(bool);
+
+  NumericSelectorList(MenuItem *parent, const FlashString *text,
+                    uint8_t &variable, uint8_t upper, const char **arr = NULL,
+                    SelectCallback callback = NULL);
+
+  char getTypeId() { return 'l'; };
+
+  const char *getSecondaryText();
+
+  bool activate();
+  void deactivate();
+
+  void doNext();
+  void doPrev();
+
+private:
+  uint8_t &variable;
+  uint8_t oldValue, lower, upper, stepSize;
+  const char **arr = NULL;
+  char valueStr[18];
 };
 
 #endif

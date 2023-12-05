@@ -1,74 +1,66 @@
 #include "NumericSelector.h"
 
-NumericSelector::NumericSelector(MenuItem* parent, const FlashString* text, uint8_t& variable, uint8_t min, uint8_t max, uint8_t stepSize, NumberSelectedCallback callback, const char** arr) : MenuItem(parent, text), variable(variable) {
-    this->min = min;
-    this->max = max;
-    this->stepSize = stepSize;
+NumericSelector::NumericSelector(MenuItem *parent, const FlashString *text,
+                             SelectCallback callback)
+    : MenuItem(parent, text), callback(callback){};
 
-    this->callback = callback;
-
-    oldValue = variable;
-
-    if (arr)
-      this->arr = arr;
-};
-
-uint8_t NumericSelector::getValue() { return variable; }
-uint8_t NumericSelector::getMin()   { return min; }
-uint8_t NumericSelector::getMax()   { return max; }
-uint8_t NumericSelector::getStepSize() { return stepSize; }
-
-const char* NumericSelector::getSecondaryText() {
-    if (!arr) {
-      snprintf_P(valueStr, 18, PSTR("%d"), variable);
-    } else {
-      snprintf_P(valueStr, 18, PSTR("%s"), arr[variable]);
-    }
-
-    return valueStr;
+MenuItem *NumericSelector::action() {
+  setEditingState(false);
+  if (callback)
+    callback(true);
+  return getParent();
 }
 
-bool NumericSelector::activate() {
-    oldValue = variable;
-    setEditingState(true);
+NumericSelectorUint8::NumericSelectorUint8(MenuItem *parent,
+                                       const FlashString *text,
+                                       uint8_t &variable, uint8_t lower,
+                                       uint8_t upper, uint8_t stepSize,
+                                       SelectCallback callback)
+    : NumericSelector(parent, text, callback), variable(variable),
+      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize){};
 
-    return 1;
+NumericSelectorInt16::NumericSelectorInt16(MenuItem *parent,
+                                       const FlashString *text,
+                                       int16_t &variable, int16_t lower,
+                                       int16_t upper, int16_t stepSize,
+                                       SelectCallback callback)
+    : NumericSelector(parent, text, callback), variable(variable),
+      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize){};
+
+NumericSelectorList::NumericSelectorList(MenuItem *parent, const FlashString *text,
+                                     uint8_t &variable, uint8_t upper,
+                                     const char **arr,
+                                     SelectCallback callback)
+    : NumericSelector(parent, text, callback), variable(variable),
+      oldValue(variable), lower(0), upper(upper), stepSize(1), arr(arr){};
+
+bool NumericSelectorUint8::activate() { return activateT(variable, oldValue); }
+bool NumericSelectorInt16::activate() { return activateT(variable, oldValue); }
+bool NumericSelectorList::activate() { return activateT(variable, oldValue); }
+
+void NumericSelectorUint8::deactivate() { deactivateT(variable, oldValue); }
+void NumericSelectorInt16::deactivate() { deactivateT(variable, oldValue); }
+void NumericSelectorList::deactivate() { deactivateT(variable, oldValue); }
+
+void NumericSelectorUint8::doNext() { doNextT(variable, upper, stepSize); }
+void NumericSelectorInt16::doNext() { doNextT(variable, upper, stepSize); }
+void NumericSelectorList::doNext() { doNextT(variable, upper, stepSize); }
+
+void NumericSelectorUint8::doPrev() { doPrevT(variable, lower, stepSize); }
+void NumericSelectorInt16::doPrev() { doPrevT(variable, lower, stepSize); }
+void NumericSelectorList::doPrev() { doPrevT(variable, lower, stepSize); }
+
+const char *NumericSelectorUint8::getSecondaryText() {
+  snprintf_P(valueStr, 18, PSTR("%d"), variable);
+  return valueStr;
 }
 
-void NumericSelector::deactivate() {
-    variable = oldValue;
-    setEditingState(false);
-
-    // On cancel restore the value
-    if (this->callback)
-        this->callback(false);
+const char *NumericSelectorInt16::getSecondaryText() {
+  snprintf_P(valueStr, 18, PSTR("%d"), variable);
+  return valueStr;
 }
 
-void NumericSelector::doNext() {
-    if(variable + stepSize >= this->max)
-        variable = this->max;
-    else
-        variable = variable + stepSize;
-
-    if (this->callback)
-        this->callback(false);
-
-}
-
-void NumericSelector::doPrev() {
-    if(variable - stepSize <= this->min)
-        variable = this->min;
-    else
-        variable = variable - stepSize;
-
-    if (this->callback)
-        this->callback(false);
-}
-
-MenuItem* NumericSelector::action() {
-    setEditingState(false);
-    if (this->callback)
-        this->callback(true);
-
-    return this->getParent();
+const char *NumericSelectorList::getSecondaryText() {
+  snprintf_P(valueStr, 18, PSTR("%s"), arr[variable]);
+  return valueStr;
 }
