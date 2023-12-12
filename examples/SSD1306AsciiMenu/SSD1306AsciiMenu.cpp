@@ -16,6 +16,7 @@ MenuController* menu = new MenuController(root, dr);
 
 uint8_t test_uint8 = 10;
 int16_t test_int16 = 1000;
+int16_t test_deci = 0;
 char cmd;
 bool led_active = false;
 
@@ -76,7 +77,8 @@ void setup() {
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
       sub->addItem(new NumericSelectorUint8(sub, F("uInt8"), test_uint8, 0, 255, 5, F("ms"), numberSelectedCallback));
-      sub->addItem(new NumericSelectorInt16(sub, F("int16"), test_int16, 0, 10000, 1000, F("mm"), numberSelectedCallback));
+      sub->addItem(new NumericSelectorInt16(sub, F("int16"), test_int16, 0, 10000, 1000, 0, F("mm"), numberSelectedCallback));
+      sub->addItem(new NumericSelectorInt16(sub, F("intDec"), test_deci, -100, 100, 10, 2, F("kg"), numberSelectedCallback));
       sub->addItem(new NumericSelectorList(sub, F("list"), test_arr_val, test_arr_max, test_arr));
 
       root->addItem(sub);

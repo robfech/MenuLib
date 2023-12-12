@@ -19,18 +19,17 @@ NumericSelectorUint8::NumericSelectorUint8(MenuItem *parent,
                                            SelectCallback callback)
     : NumericSelector(parent, text, callback), variable(variable),
       oldValue(variable), lower(lower), upper(upper), stepSize(stepSize) {
-        this->unit = unit;
-      };
+  this->unit = unit;
+};
 
-NumericSelectorInt16::NumericSelectorInt16(MenuItem *parent,
-                                           const FlashString *text,
-                                           int16_t &variable, int16_t lower,
-                                           int16_t upper, int16_t stepSize,
-                                           const FlashString *unit,
-                                           SelectCallback callback)
+NumericSelectorInt16::NumericSelectorInt16(
+    MenuItem *parent, const FlashString *text, int16_t &variable, int16_t lower,
+    int16_t upper, int16_t stepSize, uint8_t decPlaces, const FlashString *unit,
+    SelectCallback callback)
     : NumericSelector(parent, text, callback), variable(variable),
-      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize) {
-        this->unit = unit;
+      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize),
+      decPlaces(decPlaces) {
+  this->unit = unit;
 };
 
 NumericSelectorList::NumericSelectorList(MenuItem *parent,
@@ -63,7 +62,7 @@ const char *NumericSelectorUint8::getSecondaryText() {
 }
 
 const char *NumericSelectorInt16::getSecondaryText() {
-  snprintf_P(valueStr, 18, PSTR("%d %S"), variable, unit);
+  snprintf_P(valueStr, 18, PSTR("%s %S"), intDecimal(variable, decPlaces), unit);
   return valueStr;
 }
 

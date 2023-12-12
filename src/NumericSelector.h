@@ -7,6 +7,7 @@
 #include <Arduino.h>
 
 #include "MenuItem.h"
+#include "IntDecimal.h"
 
 #ifndef NumericSelector_h
 #define NumericSelector_h
@@ -86,7 +87,8 @@ public:
 
   NumericSelectorInt16(MenuItem *parent, const FlashString *text,
                        int16_t &variable, int16_t lower, int16_t upper,
-                       int16_t stepSize = 1, const FlashString *unit = NULL,
+                       int16_t stepSize = 1, uint8_t decPlaces = 0,
+                       const FlashString *unit = NULL,
                        SelectCallback callback = NULL);
 
   char getTypeId() { return 'i'; };
@@ -102,6 +104,7 @@ public:
 private:
   int16_t &variable;
   int16_t oldValue, lower, upper, stepSize;
+  uint8_t decPlaces;
 };
 
 class NumericSelectorList : public NumericSelector {
