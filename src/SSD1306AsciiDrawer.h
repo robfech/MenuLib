@@ -21,9 +21,8 @@ class SSD1306AsciiDrawer : public MenuItemDrawer {
     uint8_t selectedLine;
 
   public:
-    SSD1306AsciiDrawer(SSD1306AsciiWire &oled, uint8_t colSecondary = 12*7)  : oled(oled) {
-      this->colSecondary = colSecondary;
-    }
+    SSD1306AsciiDrawer(SSD1306AsciiWire &oled, uint8_t colSecondary = 8*7)
+    : oled(oled), colSecondary(colSecondary){}
     void draw(MenuItem* item);
 
 };

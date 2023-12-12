@@ -15,7 +15,7 @@ class NumericSelector : public MenuItem {
 public:
   typedef void (*SelectCallback)(bool);
   NumericSelector(MenuItem *parent, const FlashString *text,
-                SelectCallback callback = NULL);
+                  SelectCallback callback = NULL);
 
   template <class T> bool activateT(T &val, T &oldVal) {
     oldVal = val;
@@ -50,8 +50,10 @@ public:
 
   MenuItem *action();
 
-private:
+protected:
   SelectCallback callback;
+  const FlashString *unit;
+  char valueStr[18];
 };
 
 class NumericSelectorUint8 : public NumericSelector {
@@ -59,9 +61,9 @@ public:
   typedef void (*SelectCallback)(bool);
 
   NumericSelectorUint8(MenuItem *parent, const FlashString *text,
-                     uint8_t &variable, uint8_t lower, uint8_t upper,
-                     uint8_t stepSize = 1,
-                     SelectCallback callback = NULL);
+                       uint8_t &variable, uint8_t lower, uint8_t upper,
+                       uint8_t stepSize = 1, const FlashString *unit = NULL,
+                       SelectCallback callback = NULL);
 
   char getTypeId() { return 'b'; };
 
@@ -76,7 +78,6 @@ public:
 private:
   uint8_t &variable;
   uint8_t oldValue, lower, upper, stepSize;
-  char valueStr[18];
 };
 
 class NumericSelectorInt16 : public NumericSelector {
@@ -84,9 +85,9 @@ public:
   typedef void (*SelectCallback)(bool);
 
   NumericSelectorInt16(MenuItem *parent, const FlashString *text,
-                     int16_t &variable, int16_t lower, int16_t upper,
-                     int16_t stepSize = 1,
-                     SelectCallback callback = NULL);
+                       int16_t &variable, int16_t lower, int16_t upper,
+                       int16_t stepSize = 1, const FlashString *unit = NULL,
+                       SelectCallback callback = NULL);
 
   char getTypeId() { return 'i'; };
 
@@ -101,7 +102,6 @@ public:
 private:
   int16_t &variable;
   int16_t oldValue, lower, upper, stepSize;
-  char valueStr[18];
 };
 
 class NumericSelectorList : public NumericSelector {
@@ -109,8 +109,8 @@ public:
   typedef void (*SelectCallback)(bool);
 
   NumericSelectorList(MenuItem *parent, const FlashString *text,
-                    uint8_t &variable, uint8_t upper, const char **arr = NULL,
-                    SelectCallback callback = NULL);
+                      uint8_t &variable, uint8_t upper, const char **arr = NULL,
+                      SelectCallback callback = NULL);
 
   char getTypeId() { return 'l'; };
 
@@ -126,7 +126,6 @@ private:
   uint8_t &variable;
   uint8_t oldValue, lower, upper, stepSize;
   const char **arr = NULL;
-  char valueStr[18];
 };
 
 #endif

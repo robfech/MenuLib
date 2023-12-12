@@ -56,12 +56,12 @@ void setup() {
 
   root->setText(F("Menu"));
 
-  root->addItem(new Action(root, F("Do something"), NULL));
+  root->addItem(new Action(root, F("Action"), test_action));
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
-      sub->addItem(new NumericSelectorUint8(sub, F("uInt8 value"), test_uint8, 0, 255, 5, numberSelectedCallback));
-      sub->addItem(new NumericSelectorInt16(sub, F("Int16 value"), test_int16, 0, 10000, 1000, numberSelectedCallback));
+      sub->addItem(new NumericSelectorUint8(sub, F("uInt8 value"), test_uint8, 0, 255, 5, F("ms"), numberSelectedCallback));
+      sub->addItem(new NumericSelectorInt16(sub, F("Int16 value"), test_int16, 0, 10000, 1000, F("mm"), numberSelectedCallback));
       sub->addItem(new NumericSelectorList(sub, F("List value "), test_arr_val, test_arr_max, test_arr));
 
       root->addItem(sub);
