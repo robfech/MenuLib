@@ -26,8 +26,10 @@ class CheckBox : public MenuItem {
         void deactivate() {};
 
         // These three methods do nothing. Since CheckBox doesn't take control, they are never called.
-        void doNext() { }
-        void doPrev() { }
+        void doIncr() { }
+        void doDecr() { }
+        void doIncrFast() { }
+        void doDecrFast() { }
         MenuItem* action() { return NULL; }
     private:
         bool& value;

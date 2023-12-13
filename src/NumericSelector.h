@@ -31,7 +31,7 @@ public:
       callback(false);
   }
 
-  template <class T> void doNextT(T &val, T upper, T incr) {
+  template <class T> void doIncrT(T &val, T upper, T incr) {
     if (val + incr > upper)
       val = upper;
     else
@@ -40,7 +40,7 @@ public:
       callback(false);
   }
 
-  template <class T> void doPrevT(T &val, T lower, T incr) {
+  template <class T> void doDecrT(T &val, T lower, T incr) {
     if (val - incr < lower)
       val = lower;
     else
@@ -63,7 +63,8 @@ public:
 
   NumericSelectorUint8(MenuItem *parent, const FlashString *text,
                        uint8_t &variable, uint8_t lower, uint8_t upper,
-                       uint8_t stepSize = 1, const FlashString *unit = NULL,
+                       uint8_t stepSize = 1, uint8_t stepSizeFast = 1,
+                       const FlashString *unit = NULL,
                        SelectCallback callback = NULL);
 
   char getTypeId() { return 'b'; };
@@ -73,12 +74,14 @@ public:
   bool activate();
   void deactivate();
 
-  void doNext();
-  void doPrev();
+  void doIncr();
+  void doIncrFast();
+  void doDecr();
+  void doDecrFast();
 
 private:
   uint8_t &variable;
-  uint8_t oldValue, lower, upper, stepSize;
+  uint8_t oldValue, lower, upper, stepSize, stepSizeFast;
 };
 
 class NumericSelectorInt16 : public NumericSelector {
@@ -87,8 +90,8 @@ public:
 
   NumericSelectorInt16(MenuItem *parent, const FlashString *text,
                        int16_t &variable, int16_t lower, int16_t upper,
-                       int16_t stepSize = 1, uint8_t decPlaces = 0,
-                       const FlashString *unit = NULL,
+                       int16_t stepSize = 1, int16_t stepSizeFast = 1,
+                       uint8_t decPlaces = 0, const FlashString *unit = NULL,
                        SelectCallback callback = NULL);
 
   char getTypeId() { return 'i'; };
@@ -98,12 +101,14 @@ public:
   bool activate();
   void deactivate();
 
-  void doNext();
-  void doPrev();
+  void doIncr();
+  void doIncrFast();
+  void doDecr();
+  void doDecrFast();
 
 private:
   int16_t &variable;
-  int16_t oldValue, lower, upper, stepSize;
+  int16_t oldValue, lower, upper, stepSize, stepSizeFast;
   uint8_t decPlaces;
 };
 
@@ -122,8 +127,10 @@ public:
   bool activate();
   void deactivate();
 
-  void doNext();
-  void doPrev();
+  void doIncr();
+  void doIncrFast();
+  void doDecr();
+  void doDecrFast();
 
 private:
   uint8_t &variable;

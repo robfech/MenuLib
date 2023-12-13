@@ -18,20 +18,33 @@ MenuController::MenuController(MenuItem* root, MenuItemDrawer* drawer) {
 };
 
 
-void MenuController::next() {
+void MenuController::incr() {
 	if(exiting) exiting = 0;
 
-    if(currentItem) 
-        currentItem->doNext();
+    if(currentItem)
+        currentItem->doIncr();
 }
 
-void MenuController::prev() {
+void MenuController::incrFast() {
 	if(exiting) exiting = 0;
-    
+
+    if(currentItem)
+        currentItem->doIncrFast();
+}
+
+void MenuController::decr() {
+	if(exiting) exiting = 0;
+
 	if(currentItem)
-        currentItem->doPrev();
+        currentItem->doDecr();
 }
 
+void MenuController::decrFast() {
+	if(exiting) exiting = 0;
+
+	if(currentItem)
+        currentItem->doDecrFast();
+}
 
 void MenuController::select() {
     if(!currentItem) return;
@@ -42,12 +55,12 @@ void MenuController::select() {
         takeControl(ret);
 }
 
-void MenuController::back() {
+void MenuController::esc() {
     if(!currentItem) return;
-    
-    if(!currentItem->back())
+
+    if(!currentItem->esc())
         return;
-    
+
     currentItem->deactivate();
 
     if (currentItem->getParent())

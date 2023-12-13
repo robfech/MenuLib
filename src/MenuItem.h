@@ -49,11 +49,13 @@ class MenuItem {
 
         // Called when event "next" is triggered
         // Usually this event is triggered when a down or right key is pressed
-        virtual void doNext() = 0;
+        virtual void doIncr() = 0;
+        virtual void doIncrFast() = 0;
 
         // Called when event "prev" is triggered
         // Usually this event is triggered when up or left key is pressed
-        virtual void doPrev() = 0;
+        virtual void doDecr() = 0;
+        virtual void doDecrFast() = 0;
 
         // Called when event "action" is triggered
         // Usually this event is triggered when center or ok key is pressed
@@ -62,7 +64,7 @@ class MenuItem {
         // Se ritorna this o NULL, l'oggetto stesso manterrà il controllo.
         virtual MenuItem* action() = 0;
 
-        virtual bool back() { return true; }
+        virtual bool esc() { return true; }
 
         virtual ~MenuItem() {}
 };

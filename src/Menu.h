@@ -13,11 +13,11 @@
 
 struct ListEntry {
     ListEntry(MenuItem* i) : item(i) {
-        next = NULL; prev = NULL;
+        nextEntry = NULL; prevEntry = NULL;
     }
 
-    ListEntry* next;
-    ListEntry* prev;
+    ListEntry* nextEntry;
+    ListEntry* prevEntry;
 
     MenuItem* item;
 };
@@ -50,9 +50,11 @@ class Menu : public MenuItem {
         void deactivate();
 
         // Selects the next item in the list
-        void doNext();
+        void doIncr();
+        void doIncrFast();
         // Selects the prev item in the list
-        void doPrev();
+        void doDecr();
+        void doDecrFast();
 
         MenuItem* action();
 

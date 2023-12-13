@@ -12,7 +12,6 @@
 #ifndef MenuController_h
 #define MenuController_h
 
-typedef enum menu_event_t {NONE, MENU_PREV, MENU_NEXT, MENU_SELECT, MENU_BACK} menu_event_t;
 
 class MenuController {
     private:
@@ -26,11 +25,13 @@ class MenuController {
         MenuController();
         MenuController(MenuItem* root, MenuItemDrawer* drawer);
 
-        void next();
-        void prev();
+        void incr();
+        void incrFast();
+        void decr();
+        void decrFast();
 
         void select();
-        void back();
+        void esc();
 
         void draw();
 

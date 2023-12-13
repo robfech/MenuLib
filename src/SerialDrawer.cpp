@@ -31,7 +31,7 @@ void SerialDrawer::drawMenu(Menu* menu) {
             Serial.println();
 
             if ( e == menu->getLastDrawerEntry()) break;
-            e = e->next;
+            e = e->nextEntry;
         }
 }
 

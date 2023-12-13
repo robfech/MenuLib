@@ -32,8 +32,10 @@ template <class T> class ParamAction : public MenuItem {
         void deactivate() {};
 
         // These three methods do nothing. Since Action doesn't take control, they are never called.
-        void doNext() { }
-        void doPrev() { }
+        void doIncr() { }
+        void doDecr() { }
+        void doIncrFast() { }
+        void doDecrFast() { }
         MenuItem* action() { return NULL; }
     protected:
         // callback pointer
@@ -67,8 +69,10 @@ class Action : public MenuItem {
         void deactivate() {};
 
         // These three methods do nothing. Since Action doesn't take control, they are never called.
-        void doNext() { }
-        void doPrev() { }
+        void doIncr() { }
+        void doDecr() { }
+        void doIncrFast() { }
+        void doDecrFast() { }
         MenuItem* action() { return NULL; }
     protected:
         // callback pointer

@@ -12,8 +12,8 @@ MenuItem* Menu::addItem(MenuItem* item) {
     ListEntry* e = new ListEntry(item);
 
     if(firstEntry) {
-        lastEntry->next = e;
-        e->prev = lastEntry;
+        lastEntry->nextEntry = e;
+        e->prevEntry = lastEntry;
     } else
         firstEntry = e;
 
@@ -27,7 +27,7 @@ MenuItem* Menu::addItem(MenuItem* item) {
     for (int i = 0; i < drawerLines; i++) {
       if (!ee) break;
       lastDrawerEntry = ee;
-      ee = ee->next;
+      ee = ee->nextEntry;
     }
     selectedLine = 1;
 
@@ -36,14 +36,14 @@ MenuItem* Menu::addItem(MenuItem* item) {
 
 void Menu::clearItems() {
     ListEntry* e = this->firstEntry;
-    ListEntry* next;
+    ListEntry* nextEntry;
 
     while(e) {
-        next = e->next;
+        nextEntry = e->nextEntry;
 
         delete e;
 
-        e = next;
+        e = nextEntry;
     }
 
     this->firstEntry = NULL;
@@ -58,9 +58,9 @@ bool Menu::activate() {
     // Select the previous selected item when entering the menu
     selectedItem = prevSelectedItem;
 
-    // And jump to the next. If firstElement is enabled, it will stop there,
+    // And jump to the nextEntry. If firstElement is enabled, it will stop there,
     // otherwise it will find the first enabled item.
-    // doNext();
+    // doIncr();
     return 1;
 }
 
@@ -72,20 +72,20 @@ void Menu::deactivate() {
     for (int i = 0; i < drawerLines; i++) {
       if (!e) break;
       lastDrawerEntry = e;
-      e = e->next;
+      e = e->nextEntry;
     }
     selectedLine = 1;
 
 }
 
-void Menu::doNext() {
-  selectedItem = selectedItem->next;
+void Menu::doIncr() {
+  selectedItem = selectedItem->nextEntry;
   if (selectedItem) {
     selectedLine++;
     if (selectedLine > drawerLines) selectedLine = drawerLines;
-    if (selectedItem->prev == lastDrawerEntry){
+    if (selectedItem->prevEntry == lastDrawerEntry){
       lastDrawerEntry = selectedItem;
-      firstDrawerEntry =  firstDrawerEntry->next;
+      firstDrawerEntry =  firstDrawerEntry->nextEntry;
     }
   }
   else {
@@ -93,28 +93,27 @@ void Menu::doNext() {
   }
 }
 
-void Menu::doPrev() {
-  selectedItem = selectedItem->prev;
+void Menu::doIncrFast(){
+  doIncr();
+}
+
+void Menu::doDecr() {
+  selectedItem = selectedItem->prevEntry;
   if (selectedItem){
     selectedLine--;
     if (selectedLine < 1) selectedLine = 1;
-    if (selectedItem->next == firstDrawerEntry){
+    if (selectedItem->nextEntry == firstDrawerEntry){
       firstDrawerEntry = selectedItem;
-      lastDrawerEntry =  lastDrawerEntry->prev;
+      lastDrawerEntry =  lastDrawerEntry->prevEntry;
     }
   }
   else {
     selectedItem = firstEntry;
   }
+}
 
-    // // TODO: infinite loop if all entries are disabled??
-    // do {
-    //
-    //     selectedItem = selectedItem->prev;
-    //
-    //     if(!selectedItem) selectedItem = firstEntry;
-    //
-    // } while(!selectedItem->item->isEnabled());
+void Menu::doDecrFast(){
+  doDecr();
 }
 
 MenuItem* Menu::action() {

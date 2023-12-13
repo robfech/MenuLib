@@ -42,7 +42,7 @@ void SSD1306AsciiDrawer::drawMenu(Menu* menu) {
       oled.println();
 
 
-      e = e->next;
+      e = e->nextEntry;
   }
   selectedLine = menu->getSelectedLine();
 }

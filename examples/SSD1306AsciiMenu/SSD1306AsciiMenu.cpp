@@ -26,13 +26,17 @@ uint8_t test_arr_max = 3;
 
 void test_action();
 
-menu_event_t buttonEvent() {
+typedef enum button_event_t {NONE, BTN_DECR, BTN_DECR_FAST, BTN_INCR, BTN_INCR_FAST, BTN_SEL, BTN_ESC} button_event_t;
+
+button_event_t buttonEvent() {
   cmd = Serial.read();
   switch(cmd) {
-      case 'a': return MENU_PREV;
-      case 'd': return MENU_NEXT;
-      case ' ': return MENU_SELECT;
-      case 's': return MENU_BACK;
+      case 'a': return BTN_DECR;
+      case 'd': return BTN_INCR;
+      case 'q': return BTN_DECR_FAST;
+      case 'e': return BTN_INCR_FAST;
+      case ' ': return BTN_SEL;
+      case 's': return BTN_ESC;
       default:
         return NONE;
   }
@@ -76,9 +80,9 @@ void setup() {
   Menu* sub = new Menu(root, F("Sub Menu"));
       sub->addItem(new Action(sub, F("Action"), test_action));
       sub->addItem(new CheckBox(sub, F("LED"), led_active, checkboxCallback));
-      sub->addItem(new NumericSelectorUint8(sub, F("uInt8"), test_uint8, 0, 255, 5, F("ms"), numberSelectedCallback));
-      sub->addItem(new NumericSelectorInt16(sub, F("int16"), test_int16, 0, 10000, 1000, 0, F("mm"), numberSelectedCallback));
-      sub->addItem(new NumericSelectorInt16(sub, F("intDec"), test_deci, -100, 100, 10, 2, F("kg"), numberSelectedCallback));
+      sub->addItem(new NumericSelectorUint8(sub, F("uInt8"), test_uint8, 0, 255, 1, 10, F("ms"), numberSelectedCallback));
+      sub->addItem(new NumericSelectorInt16(sub, F("int16"), test_int16, 0, 10000, 10, 1000, 0, F("mm"), numberSelectedCallback));
+      sub->addItem(new NumericSelectorInt16(sub, F("intDec"), test_deci, -100, 100, 1, 20, 2, F("kg"), numberSelectedCallback));
       sub->addItem(new NumericSelectorList(sub, F("list"), test_arr_val, test_arr_max, test_arr));
 
       root->addItem(sub);
@@ -91,10 +95,12 @@ void loop() {
 
     switch (buttonEvent()) {
       case NONE: break;
-      case MENU_PREV: menu->prev(); break;
-      case MENU_NEXT: menu->next(); break;
-      case MENU_SELECT: menu->select(); break;
-      case MENU_BACK: menu->back(); break;
+      case BTN_DECR: menu->decr(); break;
+      case BTN_DECR_FAST: menu->decrFast(); break;
+      case BTN_INCR: menu->incr(); break;
+      case BTN_INCR_FAST: menu->incrFast(); break;
+      case BTN_SEL: menu->select(); break;
+      case BTN_ESC: menu->esc(); break;
     }
 
     menu->draw();
@@ -106,8 +112,8 @@ void test_action() {
   oled.print(F("Action: "));
   for (int i=0; i < 10; i++) {
     // if select or return button is pushed exit the function and go back to menu
-    menu_event_t event = buttonEvent();
-    if ((event == MENU_BACK) || (event == MENU_SELECT)) break;
+    button_event_t event = buttonEvent();
+    if ((event == BTN_ESC) || (event == BTN_SEL)) break;
 
     oled.print(F("."));
     delay(200);
