@@ -10,72 +10,81 @@
 #define Action_h
 
 template <class T> class ParamAction : public MenuItem {
-    public:
-        typedef void(*ActionCallback)(T);
+public:
+  typedef void (*ActionCallback)(T);
 
-        ParamAction(MenuItem* parent, const FlashString* text, ActionCallback callback, T data): MenuItem(parent, text) {
-            this->callback = callback;
-            this->data = data;
-        }
+  ParamAction(MenuItem *parent, const FlashString *text,
+              ActionCallback callback, T data)
+      : MenuItem(parent, text) {
+    this->callback = callback;
+    this->data = data;
+  }
 
-        char getTypeId() { return 'a'; }
+  char getTypeId() { return 'a'; }
 
-        // MenuItem fields
+  // MenuItem fields
 
-        // When activated from parent menu, trigger the callback and don't take control.
-        bool activate() {
-            if (this->callback)
-                this->callback(this->data);
+  // When activated from parent menu, trigger the callback and don't take
+  // control.
+  bool activate() {
+    if (this->callback)
+      this->callback(this->data);
 
-            return 0;
-        }
-        void deactivate() {};
+    return 0;
+  }
+  void deactivate(){};
 
-        // These three methods do nothing. Since Action doesn't take control, they are never called.
-        void doIncr() { }
-        void doDecr() { }
-        void doIncrFast() { }
-        void doDecrFast() { }
-        MenuItem* action() { return NULL; }
-    protected:
-        // callback pointer
-        ActionCallback callback;
+  // These three methods do nothing. Since Action doesn't take control, they are
+  // never called.
+  void doIncr() {}
+  void doDecr() {}
+  void doIncrFast() {}
+  void doDecrFast() {}
+  MenuItem *action() { return NULL; }
 
-        T data;
+protected:
+  // callback pointer
+  ActionCallback callback;
+
+  T data;
 };
 
 class Action : public MenuItem {
-    public:
-        typedef void(*ActionCallback)(void);
+public:
+  typedef void (*ActionCallback)(void);
 
-        Action(MenuItem* parent, const FlashString* text, ActionCallback callback): MenuItem(parent, text) {
-            setCallback(callback);
-        }
+  Action(MenuItem *parent, const FlashString *text, ActionCallback callback)
+      : MenuItem(parent, text) {
+    setCallback(callback);
+  }
 
-        char getTypeId() { return 'a'; }
+  char getTypeId() { return 'a'; }
 
-        // Set the callback to execute.
-        void setCallback(ActionCallback callback) { this->callback = callback; }
+  // Set the callback to execute.
+  void setCallback(ActionCallback callback) { this->callback = callback; }
 
-        // MenuItem fields
+  // MenuItem fields
 
-        // When activated from parent menu, trigger the callback and don't take control.
-        bool activate() {
-            if (this->callback)
-                this->callback();
+  // When activated from parent menu, trigger the callback and don't take
+  // control.
+  bool activate() {
+    if (this->callback)
+      this->callback();
 
-            return 0;
-        }
-        void deactivate() {};
+    return 0;
+  }
+  void deactivate(){};
 
-        // These three methods do nothing. Since Action doesn't take control, they are never called.
-        void doIncr() { }
-        void doDecr() { }
-        void doIncrFast() { }
-        void doDecrFast() { }
-        MenuItem* action() { return NULL; }
-    protected:
-        // callback pointer
-        ActionCallback callback;
+  // These three methods do nothing. Since Action doesn't take control, they are
+  // never called.
+  void doIncr() {}
+  void doDecr() {}
+  void doIncrFast() {}
+  void doDecrFast() {}
+  MenuItem *action() { return NULL; }
+
+protected:
+  // callback pointer
+  ActionCallback callback;
 };
 #endif

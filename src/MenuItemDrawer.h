@@ -1,4 +1,4 @@
-/* Some headings */ 
+/* Some headings */
 
 #include "MenuItem.h"
 
@@ -8,8 +8,8 @@
 //  Abstract class
 
 class MenuItemDrawer {
-    public:
-        virtual void draw(MenuItem* item) = 0;
+public:
+  virtual void draw(MenuItem *item) = 0;
 };
 
 #endif

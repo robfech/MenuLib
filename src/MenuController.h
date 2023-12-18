@@ -2,42 +2,39 @@
     Implementation of Menu controller.
 */
 
-
-#include "NumericSelector.h"
 #include "Action.h"
 #include "Menu.h"
+#include "NumericSelector.h"
 
 #include "SerialDrawer.h"
 
 #ifndef MenuController_h
 #define MenuController_h
 
-
 class MenuController {
-    private:
-        MenuItem* currentItem;
-        MenuItemDrawer* drawer;
+private:
+  MenuItem *currentItem;
+  MenuItemDrawer *drawer;
 
-        bool exiting;
+  bool exiting;
 
+public:
+  MenuController();
+  MenuController(MenuItem *root, MenuItemDrawer *drawer);
 
-    public:
-        MenuController();
-        MenuController(MenuItem* root, MenuItemDrawer* drawer);
+  void incr();
+  void incrFast();
+  void decr();
+  void decrFast();
 
-        void incr();
-        void incrFast();
-        void decr();
-        void decrFast();
+  void select();
+  void esc();
 
-        void select();
-        void esc();
+  void draw();
 
-        void draw();
+  int canExit();
 
-        int canExit();
-
-        void takeControl(MenuItem* item);
+  void takeControl(MenuItem *item);
 };
 
 #endif

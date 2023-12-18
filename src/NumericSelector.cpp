@@ -11,25 +11,23 @@ MenuItem *NumericSelector::action() {
   return getParent();
 }
 
-NumericSelectorUint8::NumericSelectorUint8(MenuItem *parent,
-                                           const FlashString *text,
-                                           uint8_t &variable, uint8_t lower,
-                                           uint8_t upper, uint8_t stepSize,
-                                           uint8_t stepSizeFast,
-                                           const FlashString *unit,
-                                           SelectCallback callback)
+NumericSelectorUint8::NumericSelectorUint8(
+    MenuItem *parent, const FlashString *text, uint8_t &variable, uint8_t lower,
+    uint8_t upper, uint8_t stepSize, uint8_t stepSizeFast,
+    const FlashString *unit, SelectCallback callback)
     : NumericSelector(parent, text, callback), variable(variable),
-      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize), stepSizeFast(stepSizeFast) {
+      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize),
+      stepSizeFast(stepSizeFast) {
   this->unit = unit;
 };
 
 NumericSelectorInt16::NumericSelectorInt16(
     MenuItem *parent, const FlashString *text, int16_t &variable, int16_t lower,
-    int16_t upper, int16_t stepSize, int16_t stepSizeFast, uint8_t decPlaces, const FlashString *unit,
-    SelectCallback callback)
+    int16_t upper, int16_t stepSize, int16_t stepSizeFast, uint8_t decPlaces,
+    const FlashString *unit, SelectCallback callback)
     : NumericSelector(parent, text, callback), variable(variable),
-      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize), stepSizeFast(stepSizeFast),
-      decPlaces(decPlaces) {
+      oldValue(variable), lower(lower), upper(upper), stepSize(stepSize),
+      stepSizeFast(stepSizeFast), decPlaces(decPlaces) {
   this->unit = unit;
 };
 
@@ -57,14 +55,21 @@ void NumericSelectorUint8::doDecr() { doDecrT(variable, lower, stepSize); }
 void NumericSelectorInt16::doDecr() { doDecrT(variable, lower, stepSize); }
 void NumericSelectorList::doDecr() { doDecrT(variable, lower, stepSize); }
 
-void NumericSelectorUint8::doIncrFast() { doIncrT(variable, upper, stepSizeFast); }
-void NumericSelectorInt16::doIncrFast() { doIncrT(variable, upper, stepSizeFast); }
+void NumericSelectorUint8::doIncrFast() {
+  doIncrT(variable, upper, stepSizeFast);
+}
+void NumericSelectorInt16::doIncrFast() {
+  doIncrT(variable, upper, stepSizeFast);
+}
 void NumericSelectorList::doIncrFast() { doIncrT(variable, upper, stepSize); }
 
-void NumericSelectorUint8::doDecrFast() { doDecrT(variable, lower, stepSizeFast); }
-void NumericSelectorInt16::doDecrFast() { doDecrT(variable, lower, stepSizeFast); }
+void NumericSelectorUint8::doDecrFast() {
+  doDecrT(variable, lower, stepSizeFast);
+}
+void NumericSelectorInt16::doDecrFast() {
+  doDecrT(variable, lower, stepSizeFast);
+}
 void NumericSelectorList::doDecrFast() { doDecrT(variable, lower, stepSize); }
-
 
 const char *NumericSelectorUint8::getSecondaryText() {
   snprintf_P(valueStr, 18, PSTR("%d %S"), variable, unit);
@@ -72,7 +77,8 @@ const char *NumericSelectorUint8::getSecondaryText() {
 }
 
 const char *NumericSelectorInt16::getSecondaryText() {
-  snprintf_P(valueStr, 18, PSTR("%s %S"), intDecimal(variable, decPlaces), unit);
+  snprintf_P(valueStr, 18, PSTR("%s %S"), intDecimal(variable, decPlaces),
+             unit);
   return valueStr;
 }
 

@@ -6,8 +6,8 @@
 
 #include <Arduino.h>
 
-#include "MenuItem.h"
 #include "IntDecimal.h"
+#include "MenuItem.h"
 
 #ifndef NumericSelector_h
 #define NumericSelector_h
